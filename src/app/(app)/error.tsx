@@ -13,6 +13,14 @@ export default function AppError({
   error, reset,
 }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
+    if (
+      error.message?.includes('sign in') ||
+      (error as any).code === 'UNAUTHENTICATED' ||
+      (error as any).status === 401
+    ) {
+      window.location.href = '/login';
+      return;
+    }
     console.error('[ui] page error', { message: error.message, digest: error.digest });
   }, [error]);
 

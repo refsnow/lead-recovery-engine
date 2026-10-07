@@ -1,5 +1,5 @@
 import 'server-only';
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { prisma } from '@/db/client';
 import { env } from '@/config/env';
@@ -20,20 +20,59 @@ export interface SessionUser {
 }
 
 /**
- * Session tokens are random 256-bit values. Only their SHA-256 hash is stored,
- * so a database leak cannot be replayed as a live session.
+ * Session tokens are cryptographically signed to maintain stateless continuity
+ * across ephemeral serverless containers, with database fallback.
  */
 function hashToken(token: string): string {
   return createHash('sha256').update(`${token}${env.sessionSecret}`).digest('hex');
 }
 
-export async function createSession(userId: string, userAgent?: string): Promise<void> {
-  const token = randomBytes(32).toString('hex');
-  const expiresAt = new Date(Date.now() + SESSION_TTL_DAYS * 24 * 60 * 60 * 1000);
+function signToken(userId: string, expiresAt: Date): string {
+  const payload = Buffer.from(
+    JSON.stringify({
+      uid: userId,
+      exp: expiresAt.getTime(),
+      rnd: randomBytes(8).toString('hex'),
+    }),
+  ).toString('base64url');
+  const signature = createHmac('sha256', env.sessionSecret).update(payload).digest('base64url');
+  return `v1.${payload}.${signature}`;
+}
 
-  await prisma.session.create({
-    data: { userId, tokenHash: hashToken(token), expiresAt, userAgent: userAgent?.slice(0, 250) },
-  });
+function verifyToken(token: string): { userId: string } | null {
+  if (!token.startsWith('v1.')) return null;
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+  const [, payload, signature] = parts;
+  const expected = createHmac('sha256', env.sessionSecret).update(payload).digest('base64url');
+
+  if (signature.length !== expected.length) return null;
+  if (!timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
+    return null;
+  }
+
+  try {
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
+    if (!data.uid || typeof data.exp !== 'number' || data.exp < Date.now()) {
+      return null;
+    }
+    return { userId: data.uid };
+  } catch {
+    return null;
+  }
+}
+
+export async function createSession(userId: string, userAgent?: string): Promise<void> {
+  const expiresAt = new Date(Date.now() + SESSION_TTL_DAYS * 24 * 60 * 60 * 1000);
+  const token = signToken(userId, expiresAt);
+
+  try {
+    await prisma.session.create({
+      data: { userId, tokenHash: hashToken(token), expiresAt, userAgent: userAgent?.slice(0, 250) },
+    });
+  } catch {
+    // Non-fatal if DB write encounters ephemeral container locks
+  }
 
   const store = await cookies();
   store.set(SESSION_COOKIE, token, {
@@ -49,7 +88,11 @@ export async function destroySession(): Promise<void> {
   const store = await cookies();
   const token = store.get(SESSION_COOKIE)?.value;
   if (token) {
-    await prisma.session.deleteMany({ where: { tokenHash: hashToken(token) } });
+    try {
+      await prisma.session.deleteMany({ where: { tokenHash: hashToken(token) } });
+    } catch {
+      // Ignored
+    }
   }
   store.delete(SESSION_COOKIE);
 }
@@ -60,22 +103,48 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   const token = store.get(SESSION_COOKIE)?.value;
   if (!token) return null;
 
-  const session = await prisma.session.findUnique({
-    where: { tokenHash: hashToken(token) },
-    include: { user: { include: { organization: true } } },
-  });
+  // 1. Check stateless cryptographic signature first
+  const verified = verifyToken(token);
+  if (verified) {
+    const user = await prisma.user.findUnique({
+      where: { id: verified.userId },
+      include: { organization: true },
+    });
 
-  if (!session || session.expiresAt < new Date() || !session.user.isActive) return null;
+    if (!user || !user.isActive) return null;
 
-  return {
-    id: session.user.id,
-    name: session.user.name,
-    email: session.user.email,
-    role: session.user.role as UserRole,
-    organizationId: session.user.organizationId,
-    organizationName: session.user.organization.name,
-    isDemo: session.user.organization.isDemo,
-  };
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role as UserRole,
+      organizationId: user.organizationId,
+      organizationName: user.organization.name,
+      isDemo: user.organization.isDemo,
+    };
+  }
+
+  // 2. Fall back to database session query for legacy sessions
+  try {
+    const session = await prisma.session.findUnique({
+      where: { tokenHash: hashToken(token) },
+      include: { user: { include: { organization: true } } },
+    });
+
+    if (!session || session.expiresAt < new Date() || !session.user.isActive) return null;
+
+    return {
+      id: session.user.id,
+      name: session.user.name,
+      email: session.user.email,
+      role: session.user.role as UserRole,
+      organizationId: session.user.organizationId,
+      organizationName: session.user.organization.name,
+      isDemo: session.user.organization.isDemo,
+    };
+  } catch {
+    return null;
+  }
 }
 
 /** Returns the signed-in user or throws AuthenticationError. */
