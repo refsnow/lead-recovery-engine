@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   serverExternalPackages: ['@prisma/client'],
+  outputFileTracingIncludes: {
+    '/**': ['./prisma/dev.db'],
+  },
   async headers() {
     return [
       {

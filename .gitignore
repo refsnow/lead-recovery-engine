@@ -7,8 +7,9 @@ build
 .env*.local
 *.db
 *.db-journal
-prisma/dev.db*
+!prisma/dev.db
 .DS_Store
 coverage
 *.tsbuildinfo
 next-env.d.ts
+.vercel

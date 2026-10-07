@@ -26,7 +26,7 @@ export const env = {
 
   sessionSecret: required(
     'SESSION_SECRET',
-    process.env.SESSION_SECRET ?? (isProduction ? undefined : 'dev-only-insecure-session-secret-0123456789'),
+    process.env.SESSION_SECRET ?? '4f769679466ccc2cd85c1360a160db480cda80a6a80e8290def64b26ed89c2bc',
     32,
   ),
 
