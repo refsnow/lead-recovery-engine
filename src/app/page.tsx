@@ -51,7 +51,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-30 border-b border-ink-200/70 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-violet-600 text-xs font-bold text-white shadow-sm shadow-brand-600/30">LL</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 text-xs font-bold text-white shadow-sm shadow-brand-500/30">LL</span>
             <span className="text-sm font-semibold tracking-tight text-ink-900">Leadloop</span>
           </Link>
           <nav className="flex items-center gap-2">
@@ -69,9 +69,9 @@ export default function LandingPage() {
       <section className="relative overflow-hidden">
         {/* Ambient colour field. Purely decorative and pointer-transparent. */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <div className="aurora-blob -left-32 -top-32 h-[32rem] w-[32rem] bg-brand-300/80" />
-          <div className="aurora-blob -right-20 top-0 h-[28rem] w-[28rem] bg-violet-300/70" style={{ animationDelay: '-6s' }} />
-          <div className="aurora-blob left-1/3 top-72 h-[24rem] w-[24rem] bg-sky-300/60" style={{ animationDelay: '-12s' }} />
+          <div className="aurora-blob -left-32 -top-32 h-[32rem] w-[32rem] bg-brand-400/60" />
+          <div className="aurora-blob -right-20 top-0 h-[28rem] w-[28rem] bg-brand-500/50" style={{ animationDelay: '-6s' }} />
+          <div className="aurora-blob left-1/3 top-72 h-[24rem] w-[24rem] bg-brand-300/40" style={{ animationDelay: '-12s' }} />
           {/* Softens the field so text stays comfortably readable over it. */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/60 to-white" />
         </div>
@@ -237,7 +237,7 @@ export default function LandingPage() {
             <Reveal key={step.title} delayMs={index * 80}>
               <li className="lift group relative h-full overflow-hidden rounded-2xl border border-ink-200 bg-white p-5 hover:border-brand-200 hover:shadow-pop">
                 <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 text-xs font-bold text-white shadow-sm shadow-brand-600/30">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 text-xs font-bold text-white shadow-sm shadow-brand-500/30">
                   {index + 1}
                 </span>
                 <h3 className="mt-4 text-sm font-semibold text-ink-900">{step.title}</h3>
@@ -258,7 +258,7 @@ export default function LandingPage() {
             {FEATURES.map((feature, index) => (
               <Reveal key={feature.title} delayMs={index * 70}>
                 <div className="lift group h-full rounded-2xl border border-ink-200 bg-white p-5 hover:border-brand-200 hover:shadow-pop">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-violet-50 text-brand-600 ring-1 ring-inset ring-brand-100 transition-transform duration-200 group-hover:scale-110">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-brand-100 text-brand-700 ring-1 ring-inset ring-brand-200/70 transition-transform duration-200 group-hover:scale-110">
                     <feature.icon className="h-4.5 w-4.5" aria-hidden />
                   </span>
                   <h3 className="mt-4 text-sm font-semibold text-ink-900">{feature.title}</h3>
@@ -341,7 +341,7 @@ export default function LandingPage() {
       <section className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
           <div className="aurora-blob left-1/4 top-0 h-[22rem] w-[22rem] bg-brand-200/70" />
-          <div className="aurora-blob right-1/4 top-10 h-[20rem] w-[20rem] bg-violet-200/70" style={{ animationDelay: '-8s' }} />
+          <div className="aurora-blob right-1/4 top-10 h-[20rem] w-[20rem] bg-brand-400/40" style={{ animationDelay: '-8s' }} />
           <div className="absolute inset-0 bg-gradient-to-b from-white/60 to-white" />
         </div>
 

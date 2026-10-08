@@ -14,8 +14,8 @@ const STAGE_LINKS: Record<string, string> = {
 const STAGE_FILLS = [
   'from-brand-400 to-brand-500',
   'from-brand-500 to-brand-600',
-  'from-brand-600 to-violet-500',
-  'from-violet-500 to-violet-600',
+  'from-brand-600 to-brand-700',
+  'from-brand-700 to-brand-950',
   'from-emerald-500 to-emerald-600',
 ];
 

@@ -13,7 +13,7 @@ export default async function LoginPage() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-ink-50 px-4 py-10">
       <div className="w-full max-w-sm">
         <Link href="/" className="mb-8 flex items-center justify-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-violet-600 text-sm font-bold text-white shadow-sm shadow-brand-600/30">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 text-sm font-bold text-white shadow-sm shadow-brand-500/30">
             LL
           </span>
           <span className="text-base font-semibold tracking-tight text-ink-900">Leadloop</span>

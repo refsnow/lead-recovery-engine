@@ -23,7 +23,7 @@ export function AppShell({
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-56 flex-col border-r border-ink-200 bg-white lg:flex">
         <Link href="/dashboard" className="flex items-center gap-2 border-b border-ink-200 px-4 py-3.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-violet-600 text-xs font-bold text-white shadow-sm shadow-brand-600/30">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 text-xs font-bold text-white shadow-sm shadow-brand-500/30">
             LL
           </span>
           <span className="truncate text-sm font-semibold tracking-tight text-ink-900">Leadloop</span>
