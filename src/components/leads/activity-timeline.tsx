@@ -45,7 +45,7 @@ export function ActivityTimeline({ items }: { items: TimelineItem[] }) {
         return (
           <li key={item.id}>
             {showDate ? (
-              <p className="sticky top-0 -mx-1 bg-white/95 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-400 backdrop-blur">
+              <p className="sticky top-0 -mx-1 bg-ink-100/95 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-400 backdrop-blur">
                 {date}
               </p>
             ) : null}

@@ -6,26 +6,27 @@ export default {
     extend: {
       colors: {
         ink: {
-          50: '#faf8fd',
-          100: '#f3eff9',
-          200: '#e5dcf2',
-          300: '#c8badf',
-          400: '#9d8dbd',
-          500: '#756499',
-          600: '#584978',
-          700: '#41345c',
-          800: '#2b2043',
-          900: '#150d28',
-          950: '#080014', // Exact Ultraviolet Dark (#080014)
+          50: '#080014',  // Page canvas background (#080014)
+          100: '#0f0322', // Card & elevated container background
+          150: '#14062b', // Floating surfaces / dropdowns
+          200: '#230e46', // Card borders & divider lines
+          300: '#381a69', // Interactive hover borders
+          400: '#7558a3', // Subtle placeholders, icons, hints
+          500: '#9b7ec9', // Secondary labels & descriptions
+          600: '#bfa7e6', // Secondary text
+          700: '#ddcbf7', // Primary body text
+          800: '#f0e6fd', // High-contrast text
+          900: '#ffffff', // Crisp white titles & metrics
+          950: '#ffffff',
         },
         brand: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
+          50: '#1b053a',
+          100: '#2b0959',
+          200: '#3e0e7d',
           300: '#d8b4fe',
           400: '#E879F9', // Exact Ultraviolet Lilac (#E879F9)
           500: '#A855F7', // Exact Ultraviolet Purple (#A855F7)
-          600: '#7e22ce',
+          600: '#7e22ce', // Primary Action button
           700: '#5B21B6', // Exact Ultraviolet Deep Violet (#5B21B6)
           800: '#4c1d95',
           900: '#2e1065',

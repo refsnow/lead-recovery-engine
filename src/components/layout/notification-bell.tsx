@@ -81,14 +81,14 @@ export function NotificationBell({ initialCount }: { initialCount: number }) {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-full z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-ink-200 bg-white shadow-pop">
+        <div className="absolute right-0 top-full z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-ink-200 bg-ink-100 shadow-pop">
           <div className="border-b border-ink-200 px-4 py-2.5">
             <p className="text-sm font-semibold text-ink-900">Notifications</p>
           </div>
 
           <div className="max-h-[22rem] overflow-y-auto scroll-thin">
             {error ? (
-              <p className="px-4 py-6 text-center text-sm text-amber-700">{error}</p>
+              <p className="px-4 py-6 text-center text-sm text-amber-300">{error}</p>
             ) : items === null ? (
               <p className="px-4 py-6 text-center text-sm text-ink-400">Loading…</p>
             ) : items.length === 0 ? (
@@ -96,14 +96,14 @@ export function NotificationBell({ initialCount }: { initialCount: number }) {
                 Nothing needs your attention right now.
               </p>
             ) : (
-              <ul className="divide-y divide-ink-100">
+              <ul className="divide-y divide-ink-200/60">
                 {items.map((item) => {
                   const Icon = item.severity === 'CRITICAL' ? Flame
                     : item.severity === 'WARNING' ? AlertTriangle : Info;
-                  const tone = item.severity === 'CRITICAL' ? 'text-rose-600'
-                    : item.severity === 'WARNING' ? 'text-amber-600' : 'text-sky-600';
+                  const tone = item.severity === 'CRITICAL' ? 'text-rose-400'
+                    : item.severity === 'WARNING' ? 'text-amber-400' : 'text-sky-400';
                   const content = (
-                    <div className={cn('flex gap-2.5 px-4 py-3', !item.readAt && 'bg-brand-50/40')}>
+                    <div className={cn('flex gap-2.5 px-4 py-3', !item.readAt && 'bg-brand-950/60')}>
                       <Icon className={cn('mt-0.5 h-4 w-4 shrink-0', tone)} aria-hidden />
                       <div className="min-w-0">
                         <p className="truncate text-xs font-medium text-ink-900">{item.title}</p>
@@ -115,7 +115,7 @@ export function NotificationBell({ initialCount }: { initialCount: number }) {
                   return (
                     <li key={item.id}>
                       {item.lead
-                        ? <Link href={`/leads/${item.lead.id}`} onClick={() => setOpen(false)} className="block hover:bg-ink-50">{content}</Link>
+                        ? <Link href={`/leads/${item.lead.id}`} onClick={() => setOpen(false)} className="block hover:bg-ink-200/40">{content}</Link>
                         : content}
                     </li>
                   );

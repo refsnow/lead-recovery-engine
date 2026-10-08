@@ -23,20 +23,20 @@ export function StatCard({
 }) {
   const styles = {
     neutral: {
-      value: 'text-ink-900', edge: 'from-ink-300 to-ink-200',
-      ground: 'bg-white', iconWrap: 'bg-ink-50 text-ink-400',
+      value: 'text-ink-900', edge: 'from-brand-500 to-brand-400',
+      ground: 'bg-ink-100', iconWrap: 'bg-brand-950/70 text-brand-300',
     },
     danger: {
-      value: 'text-rose-600', edge: 'from-rose-500 to-rose-300',
-      ground: 'bg-gradient-to-b from-rose-50/70 to-white', iconWrap: 'bg-rose-50 text-rose-500',
+      value: 'text-rose-400', edge: 'from-rose-500 to-rose-400',
+      ground: 'bg-gradient-to-b from-rose-950/40 to-ink-100', iconWrap: 'bg-rose-950/60 text-rose-400',
     },
     warning: {
-      value: 'text-amber-600', edge: 'from-amber-500 to-amber-300',
-      ground: 'bg-gradient-to-b from-amber-50/70 to-white', iconWrap: 'bg-amber-50 text-amber-600',
+      value: 'text-amber-400', edge: 'from-amber-500 to-amber-400',
+      ground: 'bg-gradient-to-b from-amber-950/40 to-ink-100', iconWrap: 'bg-amber-950/60 text-amber-400',
     },
     success: {
-      value: 'text-emerald-600', edge: 'from-emerald-500 to-emerald-300',
-      ground: 'bg-gradient-to-b from-emerald-50/60 to-white', iconWrap: 'bg-emerald-50 text-emerald-600',
+      value: 'text-emerald-400', edge: 'from-emerald-500 to-emerald-400',
+      ground: 'bg-gradient-to-b from-emerald-950/40 to-ink-100', iconWrap: 'bg-emerald-950/60 text-emerald-400',
     },
   }[tone];
 

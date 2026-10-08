@@ -43,7 +43,7 @@ export default function AppError({
         </button>
         <Link
           href="/dashboard"
-          className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-ink-700 ring-1 ring-inset ring-ink-200 hover:bg-ink-50"
+          className="rounded-lg bg-ink-100 px-4 py-2 text-sm font-medium text-ink-800 ring-1 ring-inset ring-ink-200 hover:bg-ink-200"
         >
           Dashboard
         </Link>

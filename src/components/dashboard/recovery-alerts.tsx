@@ -7,9 +7,9 @@ import { cn } from '@/lib/cn';
 import type { RecoveryAlert } from '@/services/recovery.service';
 
 const SEVERITY = {
-  CRITICAL: { icon: Flame, ring: 'ring-rose-200', bg: 'bg-gradient-to-r from-rose-50/80 to-transparent', bar: 'bg-rose-500', text: 'text-rose-700', tone: 'danger' },
-  WARNING: { icon: AlertTriangle, ring: 'ring-amber-200', bg: 'bg-gradient-to-r from-amber-50/80 to-transparent', bar: 'bg-amber-500', text: 'text-amber-700', tone: 'warning' },
-  INFO: { icon: Info, ring: 'ring-sky-200', bg: 'bg-gradient-to-r from-sky-50/70 to-transparent', bar: 'bg-sky-400', text: 'text-sky-700', tone: 'info' },
+  CRITICAL: { icon: Flame, ring: 'ring-rose-800/80', bg: 'bg-gradient-to-r from-rose-950/40 to-transparent', bar: 'bg-rose-500', text: 'text-rose-400', tone: 'danger' },
+  WARNING: { icon: AlertTriangle, ring: 'ring-amber-800/80', bg: 'bg-gradient-to-r from-amber-950/40 to-transparent', bar: 'bg-amber-500', text: 'text-amber-400', tone: 'warning' },
+  INFO: { icon: Info, ring: 'ring-sky-800/80', bg: 'bg-gradient-to-r from-sky-950/40 to-transparent', bar: 'bg-sky-400', text: 'text-sky-400', tone: 'info' },
 } as const;
 
 /**
@@ -27,7 +27,7 @@ export function RecoveryAlerts({ alerts }: { alerts: RecoveryAlert[] }) {
   }
 
   return (
-    <ul className="stagger divide-y divide-ink-100">
+    <ul className="stagger divide-y divide-ink-200/60">
       {alerts.map((alert) => {
         const severity = SEVERITY[alert.severity];
         const Icon = severity.icon;
@@ -37,7 +37,7 @@ export function RecoveryAlerts({ alerts }: { alerts: RecoveryAlert[] }) {
             <div className="flex items-start gap-3">
               <span
                 className={cn(
-                  'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white ring-1',
+                  'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-ink-100 ring-1',
                   severity.ring,
                   // Critical risk gets a slow pulse; warnings and info stay still.
                   alert.severity === 'CRITICAL' && 'animate-pulse-ring',
@@ -64,10 +64,10 @@ export function RecoveryAlerts({ alerts }: { alerts: RecoveryAlert[] }) {
                     {alert.samples.map((lead) => (
                       <li
                         key={lead.id}
-                        className="lift flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg bg-white px-2.5 py-1.5 ring-1 ring-ink-200/70 hover:shadow-card hover:ring-ink-300"
+                        className="lift flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg bg-ink-100 px-2.5 py-1.5 ring-1 ring-ink-200 hover:shadow-card hover:ring-brand-500/40"
                       >
                         <span className="min-w-0 flex-1">
-                          <Link href={`/leads/${lead.id}`} className="text-xs font-medium text-ink-900 hover:text-brand-700">
+                          <Link href={`/leads/${lead.id}`} className="text-xs font-medium text-ink-900 hover:text-brand-400">
                             {lead.name}
                           </Link>
                           <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1">

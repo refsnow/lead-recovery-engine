@@ -47,18 +47,18 @@ const FAQS = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-30 border-b border-ink-200/70 bg-white/80 backdrop-blur-xl">
+    <div className="min-h-screen bg-ink-50 text-ink-700">
+      <header className="sticky top-0 z-30 border-b border-ink-200 bg-ink-50/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 text-xs font-bold text-white shadow-sm shadow-brand-500/30">LL</span>
             <span className="text-sm font-semibold tracking-tight text-ink-900">Leadloop</span>
           </Link>
           <nav className="flex items-center gap-2">
-            <Link href="#how-it-works" className="hidden rounded-lg px-3 py-1.5 text-sm text-ink-600 hover:bg-ink-100 sm:inline-flex">How it works</Link>
-            <Link href="#features" className="hidden rounded-lg px-3 py-1.5 text-sm text-ink-600 hover:bg-ink-100 sm:inline-flex">Features</Link>
-            <Link href="#faq" className="hidden rounded-lg px-3 py-1.5 text-sm text-ink-600 hover:bg-ink-100 sm:inline-flex">FAQ</Link>
-            <Link href="/login" className="press rounded-lg bg-ink-900 px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-ink-800">
+            <Link href="#how-it-works" className="hidden rounded-lg px-3 py-1.5 text-sm text-ink-400 hover:bg-ink-100 hover:text-ink-900 sm:inline-flex">How it works</Link>
+            <Link href="#features" className="hidden rounded-lg px-3 py-1.5 text-sm text-ink-400 hover:bg-ink-100 hover:text-ink-900 sm:inline-flex">Features</Link>
+            <Link href="#faq" className="hidden rounded-lg px-3 py-1.5 text-sm text-ink-400 hover:bg-ink-100 hover:text-ink-900 sm:inline-flex">FAQ</Link>
+            <Link href="/login" className="press rounded-lg bg-brand-600 px-3.5 py-1.5 text-sm font-medium text-white shadow-glow transition-colors hover:bg-brand-700">
               Sign in
             </Link>
           </nav>
@@ -73,16 +73,16 @@ export default function LandingPage() {
           <div className="aurora-blob -right-20 top-0 h-[28rem] w-[28rem] bg-brand-500/50" style={{ animationDelay: '-6s' }} />
           <div className="aurora-blob left-1/3 top-72 h-[24rem] w-[24rem] bg-brand-300/40" style={{ animationDelay: '-12s' }} />
           {/* Softens the field so text stays comfortably readable over it. */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/60 to-white" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ink-50/70 to-ink-50" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
             <div className="animate-fade-up">
-              <p className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-brand-200/70 bg-white/70 px-3 py-1 text-xs font-medium text-brand-700 shadow-sm backdrop-blur">
+              <p className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-brand-500/40 bg-brand-950/70 px-3 py-1 text-xs font-medium text-brand-300 shadow-sm backdrop-blur">
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-600" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-500" />
                 </span>
                 Built for Indian real-estate sales teams
               </p>
@@ -99,14 +99,14 @@ export default function LandingPage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/login"
-                  className="press group inline-flex items-center gap-2 rounded-xl bg-ink-900 px-5 py-3 text-sm font-medium text-white shadow-lg shadow-ink-900/15 transition-all hover:bg-ink-800 hover:shadow-xl hover:shadow-ink-900/20"
+                  className="press group inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-medium text-white shadow-glow transition-all hover:bg-brand-700"
                 >
                   Start Lead Recovery
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
                 </Link>
                 <Link
                   href="/login"
-                  className="press inline-flex items-center gap-2 rounded-xl border border-ink-200 bg-white/70 px-5 py-3 text-sm font-medium text-ink-800 backdrop-blur transition-colors hover:bg-white"
+                  className="press inline-flex items-center gap-2 rounded-xl border border-ink-200 bg-ink-100/70 px-5 py-3 text-sm font-medium text-ink-900 backdrop-blur transition-colors hover:bg-ink-100"
                 >
                   View Demo
                 </Link>
@@ -119,12 +119,12 @@ export default function LandingPage() {
 
             {/* A miniature of the alert panel — the product's actual point, not a stock image. */}
             <div className="animate-fade-up lg:animate-float" style={{ animationDelay: '0.15s' }}>
-              <div className="rounded-2xl border border-ink-200/70 bg-white/80 p-1.5 shadow-2xl shadow-ink-900/10 backdrop-blur">
-                <div className="rounded-xl bg-white">
-                  <div className="flex items-center gap-1.5 border-b border-ink-100 px-4 py-2.5">
-                    <span className="h-2 w-2 rounded-full bg-rose-300" />
-                    <span className="h-2 w-2 rounded-full bg-amber-300" />
-                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
+              <div className="rounded-2xl border border-ink-200 bg-ink-100/90 p-1.5 shadow-2xl shadow-ink-950 backdrop-blur">
+                <div className="rounded-xl bg-ink-50">
+                  <div className="flex items-center gap-1.5 border-b border-ink-200 px-4 py-2.5">
+                    <span className="h-2 w-2 rounded-full bg-rose-400" />
+                    <span className="h-2 w-2 rounded-full bg-amber-400" />
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
                     <span className="ml-2 text-[11px] font-medium text-ink-400">Lead recovery alerts</span>
                   </div>
 
@@ -144,15 +144,15 @@ export default function LandingPage() {
                       delay="0.5s"
                     />
 
-                    <div className="animate-fade-up rounded-lg border border-ink-200/70 p-2.5" style={{ animationDelay: '0.65s' }}>
+                    <div className="animate-fade-up rounded-lg border border-ink-200 bg-ink-100 p-2.5" style={{ animationDelay: '0.65s' }}>
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-xs font-medium text-ink-800">Rahul Kapoor</span>
-                        <span className="flex items-center gap-1 rounded bg-rose-50 px-1.5 py-0.5 text-[10px] font-semibold text-rose-700">
+                        <span className="flex items-center gap-1 rounded bg-rose-950/70 px-1.5 py-0.5 text-[10px] font-semibold text-rose-300 ring-1 ring-inset ring-rose-700/50">
                           <Flame className="h-2.5 w-2.5" aria-hidden />HOT
                         </span>
                       </div>
                       <div className="mt-2 flex items-center gap-2">
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-ink-100">
+                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-ink-200">
                           <div className="animate-grow-width h-full rounded-full bg-gradient-to-r from-rose-500 to-orange-400"
                             style={{ ['--target' as string]: '100%', animationDelay: '0.8s' }} />
                         </div>
@@ -160,10 +160,10 @@ export default function LandingPage() {
                       </div>
                       <p className="mt-1.5 text-[10px] text-ink-400">Last activity 5d ago · Owner: Pooja Nair</p>
                       <div className="mt-2 flex gap-1.5">
-                        <span className="inline-flex items-center gap-1 rounded-md bg-ink-900 px-2 py-1 text-[10px] font-medium text-white">
+                        <span className="inline-flex items-center gap-1 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-medium text-white shadow-sm">
                           <Phone className="h-2.5 w-2.5" aria-hidden />Call
                         </span>
-                        <span className="inline-flex items-center gap-1 rounded-md border border-ink-200 px-2 py-1 text-[10px] font-medium text-ink-600">
+                        <span className="inline-flex items-center gap-1 rounded-md border border-ink-200 bg-ink-50 px-2 py-1 text-[10px] font-medium text-ink-600">
                           <MessageSquare className="h-2.5 w-2.5" aria-hidden />WhatsApp
                         </span>
                       </div>
@@ -183,7 +183,7 @@ export default function LandingPage() {
               { value: '100%', label: 'of follow-ups tracked' },
             ].map((stat, index) => (
               <Reveal key={stat.label} delayMs={index * 80}>
-                <div className="h-full bg-white/80 px-4 py-5 text-center backdrop-blur">
+                <div className="h-full bg-ink-100/80 px-4 py-5 text-center backdrop-blur">
                   <p className="text-2xl font-semibold tracking-tight text-ink-900">{stat.value}</p>
                   <p className="mt-1 text-xs leading-snug text-ink-500">{stat.label}</p>
                 </div>
@@ -210,8 +210,8 @@ export default function LandingPage() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {PROBLEMS.map((problem, index) => (
               <Reveal key={problem.title} delayMs={index * 90}>
-                <div className="lift group h-full rounded-2xl border border-ink-200 bg-white p-5 hover:border-rose-200 hover:shadow-pop">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-500 transition-transform duration-200 group-hover:scale-110">
+                <div className="lift group h-full rounded-2xl border border-ink-200 bg-ink-100 p-5 hover:border-rose-500/40 hover:shadow-pop">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-rose-950/60 text-rose-400 border border-rose-900/50 transition-transform duration-200 group-hover:scale-110">
                     <problem.icon className="h-4.5 w-4.5" aria-hidden />
                   </span>
                   <h3 className="mt-4 text-sm font-semibold text-ink-900">{problem.title}</h3>
@@ -235,9 +235,9 @@ export default function LandingPage() {
         <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {STEPS.map((step, index) => (
             <Reveal key={step.title} delayMs={index * 80}>
-              <li className="lift group relative h-full overflow-hidden rounded-2xl border border-ink-200 bg-white p-5 hover:border-brand-200 hover:shadow-pop">
-                <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 text-xs font-bold text-white shadow-sm shadow-brand-500/30">
+              <li className="lift group relative h-full overflow-hidden rounded-2xl border border-ink-200 bg-ink-100 p-5 hover:border-brand-500/40 hover:shadow-pop">
+                <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 text-xs font-bold text-white shadow-sm shadow-brand-500/30">
                   {index + 1}
                 </span>
                 <h3 className="mt-4 text-sm font-semibold text-ink-900">{step.title}</h3>
@@ -257,8 +257,8 @@ export default function LandingPage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((feature, index) => (
               <Reveal key={feature.title} delayMs={index * 70}>
-                <div className="lift group h-full rounded-2xl border border-ink-200 bg-white p-5 hover:border-brand-200 hover:shadow-pop">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-brand-100 text-brand-700 ring-1 ring-inset ring-brand-200/70 transition-transform duration-200 group-hover:scale-110">
+                <div className="lift group h-full rounded-2xl border border-ink-200 bg-ink-100 p-5 hover:border-brand-500/40 hover:shadow-pop">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-950/80 to-brand-900/40 text-brand-300 ring-1 ring-inset ring-brand-500/30 transition-transform duration-200 group-hover:scale-110">
                     <feature.icon className="h-4.5 w-4.5" aria-hidden />
                   </span>
                   <h3 className="mt-4 text-sm font-semibold text-ink-900">{feature.title}</h3>
@@ -288,8 +288,8 @@ export default function LandingPage() {
                 'At month end, the owner sees which campaign produced the qualified leads, not just the cheapest ones.',
               ].map((line) => (
                 <li key={line} className="flex gap-2.5">
-                  <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                    <Check className="h-2.5 w-2.5 text-emerald-700" aria-hidden />
+                  <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-950/80 ring-1 ring-emerald-500/30">
+                    <Check className="h-2.5 w-2.5 text-emerald-400" aria-hidden />
                   </span>
                   <span className="text-sm leading-relaxed text-ink-700">{line}</span>
                 </li>
@@ -298,8 +298,8 @@ export default function LandingPage() {
           </Reveal>
 
           <Reveal delayMs={120}>
-          <div className="rounded-2xl border border-ink-200 bg-gradient-to-br from-ink-900 to-ink-800 p-6 shadow-xl shadow-ink-900/10">
-            <p className="text-xs font-semibold uppercase tracking-wider text-ink-400">What the dashboard answers</p>
+          <div className="rounded-2xl border border-brand-500/20 bg-gradient-to-br from-[#120429] to-[#0a0118] p-6 shadow-xl shadow-brand-950/50">
+            <p className="text-xs font-semibold uppercase tracking-wider text-brand-300">What the dashboard answers</p>
             <ul className="mt-5 space-y-2.5">
               {[
                 'Did the lead arrive?', 'Was it contacted, and how quickly?', 'Did the lead respond?',
@@ -307,7 +307,7 @@ export default function LandingPage() {
                 'Was the follow-up completed?', 'Is it going dormant — and can it be recovered?',
                 'Did it become an appointment, a customer, and how much revenue?',
               ].map((question) => (
-                <li key={question} className="flex gap-2.5 text-sm text-ink-200">
+                <li key={question} className="flex gap-2.5 text-sm text-ink-600">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400" aria-hidden />
                   {question}
                 </li>
@@ -327,7 +327,7 @@ export default function LandingPage() {
           <dl className="mt-8 space-y-3">
             {FAQS.map((faq, index) => (
               <Reveal key={faq.q} delayMs={index * 60}>
-              <div className="lift rounded-2xl border border-ink-200 bg-white p-5 hover:border-ink-300 hover:shadow-card">
+              <div className="lift rounded-2xl border border-ink-200 bg-ink-100 p-5 hover:border-brand-500/30 hover:shadow-card">
                 <dt className="text-sm font-semibold text-ink-900">{faq.q}</dt>
                 <dd className="mt-1.5 text-sm leading-relaxed text-ink-600">{faq.a}</dd>
               </div>
@@ -340,9 +340,9 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <div className="aurora-blob left-1/4 top-0 h-[22rem] w-[22rem] bg-brand-200/70" />
-          <div className="aurora-blob right-1/4 top-10 h-[20rem] w-[20rem] bg-brand-400/40" style={{ animationDelay: '-8s' }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/60 to-white" />
+          <div className="aurora-blob left-1/4 top-0 h-[22rem] w-[22rem] bg-brand-600/30" />
+          <div className="aurora-blob right-1/4 top-10 h-[20rem] w-[20rem] bg-brand-400/20" style={{ animationDelay: '-8s' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ink-50/70 to-ink-50" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-24 text-center sm:px-6">
@@ -356,7 +356,7 @@ export default function LandingPage() {
             </p>
             <Link
               href="/login"
-              className="press group mt-9 inline-flex items-center gap-2 rounded-xl bg-ink-900 px-6 py-3.5 text-sm font-medium text-white shadow-lg shadow-ink-900/15 transition-all hover:bg-ink-800 hover:shadow-xl hover:shadow-ink-900/25"
+              className="press group mt-9 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-medium text-white shadow-glow transition-all hover:bg-brand-500 hover:shadow-glow-lg"
             >
               Start Lead Recovery
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
@@ -382,13 +382,13 @@ function MockAlert({
   icon: typeof Flame; tone: 'rose' | 'amber'; title: string; body: string; delay: string;
 }) {
   const tones = {
-    rose: 'border-rose-200/70 bg-gradient-to-r from-rose-50 to-transparent text-rose-600',
-    amber: 'border-amber-200/70 bg-gradient-to-r from-amber-50 to-transparent text-amber-600',
+    rose: 'border-rose-500/30 bg-gradient-to-r from-rose-950/60 to-transparent text-rose-400',
+    amber: 'border-amber-500/30 bg-gradient-to-r from-amber-950/60 to-transparent text-amber-400',
   }[tone];
 
   return (
     <div className={`animate-fade-up flex gap-2.5 rounded-lg border p-2.5 ${tones}`} style={{ animationDelay: delay }}>
-      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded bg-white ring-1 ring-inset ring-current/20">
+      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded bg-ink-100 ring-1 ring-inset ring-current/20">
         <Icon className="h-3 w-3" aria-hidden />
       </span>
       <div className="min-w-0">

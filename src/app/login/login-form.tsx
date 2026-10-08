@@ -60,17 +60,17 @@ export function LoginForm({ demoMode }: { demoMode: boolean }) {
       </form>
 
       {demoMode ? (
-        <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-3">
-          <p className="text-xs font-semibold text-amber-900">Demo credentials — development only</p>
-          <p className="mt-1 text-[11px] leading-relaxed text-amber-800">
+        <div className="mt-6 rounded-lg border border-amber-900/60 bg-amber-950/40 p-3">
+          <p className="text-xs font-semibold text-amber-300">Demo credentials — development only</p>
+          <p className="mt-1 text-[11px] leading-relaxed text-amber-400/80">
             These accounts exist only in demo mode and must never be enabled in production.
-            Password for all: <code className="font-mono font-semibold">demo123</code>
+            Password for all: <code className="font-mono font-semibold text-amber-300">demo123</code>
           </p>
           <ul className="mt-2 space-y-1">
             {DEMO_ACCOUNTS.map((account) => (
-              <li key={account.email} className="flex items-center justify-between gap-2 text-[11px] text-amber-900">
-                <span className="font-medium">{account.label}</span>
-                <code className="font-mono">{account.email}</code>
+              <li key={account.email} className="flex items-center justify-between gap-2 text-[11px] text-amber-300">
+                <span className="font-medium text-amber-200">{account.label}</span>
+                <code className="font-mono text-amber-400">{account.email}</code>
               </li>
             ))}
           </ul>

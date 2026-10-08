@@ -35,18 +35,18 @@ export function UserMenu({ user }: { user: SessionUser }) {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-full z-30 mt-2 w-56 overflow-hidden rounded-xl border border-ink-200 bg-white shadow-pop">
-          <div className="border-b border-ink-100 px-4 py-3">
+        <div className="absolute right-0 top-full z-30 mt-2 w-56 overflow-hidden rounded-xl border border-ink-200 bg-ink-100 shadow-pop">
+          <div className="border-b border-ink-200 px-4 py-3">
             <p className="truncate text-sm font-medium text-ink-900">{user.name}</p>
             <p className="truncate text-xs text-ink-500">{user.email}</p>
-            <p className="mt-1.5 inline-flex rounded-md bg-ink-100 px-1.5 py-0.5 text-[11px] font-medium text-ink-600">
+            <p className="mt-1.5 inline-flex rounded-md bg-ink-200/50 px-1.5 py-0.5 text-[11px] font-medium text-ink-600">
               {titleCase(user.role)}
             </p>
           </div>
           <form action={logoutAction}>
             <button
               type="submit"
-              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-ink-700 hover:bg-ink-50"
+              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-ink-700 hover:bg-ink-200/50 hover:text-white"
             >
               <LogOut className="h-4 w-4" aria-hidden />
               Sign out

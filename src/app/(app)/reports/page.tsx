@@ -55,7 +55,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Sear
                 className={cn('rounded-lg px-2.5 py-1.5 text-xs font-medium',
                   option.key === selected.key
                     ? 'bg-brand-600 text-white'
-                    : 'bg-white text-ink-700 ring-1 ring-inset ring-ink-200 hover:bg-ink-50')}
+                    : 'bg-ink-100 text-ink-700 ring-1 ring-inset ring-ink-200 hover:bg-ink-200 hover:text-white')}
               >
                 {option.label}
               </Link>
@@ -183,8 +183,8 @@ function Metric({
   );
 
   return href
-    ? <Link href={href} className="bg-white px-4 py-3 hover:bg-brand-50/40">{body}</Link>
-    : <div className="bg-white px-4 py-3">{body}</div>;
+    ? <Link href={href} className="bg-ink-100 px-4 py-3 hover:bg-brand-950/40">{body}</Link>
+    : <div className="bg-ink-100 px-4 py-3">{body}</div>;
 }
 
 /**

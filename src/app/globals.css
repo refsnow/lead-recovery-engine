@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    color-scheme: light;
+    color-scheme: dark;
   }
 
   html {
@@ -13,22 +13,22 @@
   }
 
   body {
-    @apply bg-ink-50 text-ink-900;
+    @apply bg-ink-50 text-ink-700;
   }
 
   /* Visible focus for keyboard users on every interactive element. */
   :focus-visible {
-    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white;
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-ink-50;
   }
 
   ::selection {
-    @apply bg-brand-200 text-brand-950;
+    @apply bg-brand-700 text-white;
   }
 }
 
 @layer components {
   .card {
-    @apply rounded-xl border border-ink-200/70 bg-white shadow-card;
+    @apply rounded-xl border border-ink-200/90 bg-ink-100 shadow-card backdrop-blur-sm;
   }
 
   .card-pad {
@@ -40,9 +40,9 @@
   }
 
   .input {
-    @apply w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm text-ink-900
-           placeholder:text-ink-400 focus:border-brand-400 focus:outline-none
-           focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:bg-ink-50;
+    @apply w-full rounded-lg border border-ink-200 bg-[#0a0217] px-3 py-2 text-sm text-ink-900
+           placeholder:text-ink-400 focus:border-brand-500 focus:outline-none
+           focus:ring-2 focus:ring-brand-500/20 disabled:cursor-not-allowed disabled:bg-ink-50/50;
   }
 
   .table-cell {

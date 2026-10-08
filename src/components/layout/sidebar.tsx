@@ -43,15 +43,15 @@ export function Sidebar({ items, onNavigate }: { items: NavItem[]; onNavigate?: 
                         'group relative flex items-center gap-2.5 overflow-hidden rounded-lg px-2 py-1.5 text-sm',
                         'transition-all duration-200',
                         active
-                          ? 'bg-gradient-to-r from-brand-50 to-brand-50/40 font-medium text-brand-700'
-                          : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900',
+                          ? 'bg-gradient-to-r from-brand-700/40 via-brand-600/20 to-transparent font-medium text-brand-400'
+                          : 'text-ink-600 hover:bg-ink-200/50 hover:text-ink-900',
                       )}
                     >
                       {/* Active indicator slides in rather than blinking on. */}
                       <span
                         aria-hidden
                         className={cn(
-                          'absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-r-full bg-brand-600',
+                          'absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-r-full bg-brand-500 shadow-glow',
                           'transition-transform duration-200',
                           active ? 'scale-y-100' : 'scale-y-0',
                         )}

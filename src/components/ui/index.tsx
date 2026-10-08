@@ -43,13 +43,13 @@ export function PageHeader({
 // ---------------------------------------------------------------------------
 
 const BADGE_TONES = {
-  neutral: 'bg-ink-100 text-ink-700 ring-ink-200',
-  brand: 'bg-brand-50 text-brand-700 ring-brand-200',
-  success: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-  warning: 'bg-amber-50 text-amber-800 ring-amber-200',
-  danger: 'bg-rose-50 text-rose-700 ring-rose-200',
-  info: 'bg-sky-50 text-sky-700 ring-sky-200',
-  purple: 'bg-violet-50 text-violet-700 ring-violet-200',
+  neutral: 'bg-ink-200/50 text-ink-700 ring-ink-300',
+  brand: 'bg-brand-700/30 text-brand-400 ring-brand-500/40',
+  success: 'bg-emerald-950/70 text-emerald-300 ring-emerald-700/50',
+  warning: 'bg-amber-950/70 text-amber-300 ring-amber-700/50',
+  danger: 'bg-rose-950/70 text-rose-300 ring-rose-700/50',
+  info: 'bg-sky-950/70 text-sky-300 ring-sky-700/50',
+  purple: 'bg-violet-950/70 text-violet-300 ring-violet-700/50',
 } as const;
 
 export type BadgeTone = keyof typeof BADGE_TONES;
@@ -112,9 +112,9 @@ export function ScorePill({ score, className }: { score: number; className?: str
 // ---------------------------------------------------------------------------
 
 const BUTTON_VARIANTS = {
-  primary: 'bg-brand-600 text-white shadow-sm shadow-brand-600/20 hover:bg-brand-700 hover:shadow-brand-600/30 disabled:bg-brand-300',
-  secondary: 'bg-white text-ink-800 ring-1 ring-inset ring-ink-200 hover:bg-ink-50',
-  ghost: 'text-ink-600 hover:bg-ink-100 hover:text-ink-900',
+  primary: 'bg-brand-600 text-white shadow-sm shadow-brand-500/30 hover:bg-brand-700 hover:shadow-brand-500/40 disabled:bg-brand-900',
+  secondary: 'bg-ink-100 text-ink-800 ring-1 ring-inset ring-ink-200 hover:bg-ink-200 hover:text-white',
+  ghost: 'text-ink-600 hover:bg-ink-100 hover:text-white',
   danger: 'bg-rose-600 text-white hover:bg-rose-700',
   success: 'bg-emerald-600 text-white hover:bg-emerald-700',
 } as const;
@@ -203,7 +203,7 @@ export function Avatar({ name, className }: { name: string; className?: string }
   return (
     <span className={cn(
       'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold',
-      'bg-gradient-to-br from-brand-100 to-brand-200 text-brand-700 ring-1 ring-inset ring-brand-200/60',
+      'bg-gradient-to-br from-brand-700 to-brand-900 text-brand-200 ring-1 ring-inset ring-brand-500/40',
       className,
     )}>
       {letters || '?'}

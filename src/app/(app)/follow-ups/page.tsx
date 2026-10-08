@@ -55,14 +55,14 @@ export default async function FollowUpsPage({ searchParams }: { searchParams: Se
             <Link
               href="/follow-ups"
               className={cn('rounded-lg px-2.5 py-1.5 text-xs font-medium',
-                !filter ? 'bg-brand-600 text-white' : 'bg-white text-ink-700 ring-1 ring-inset ring-ink-200 hover:bg-ink-50')}
+                !filter ? 'bg-brand-600 text-white' : 'bg-ink-100 text-ink-700 ring-1 ring-inset ring-ink-200 hover:bg-ink-200 hover:text-white')}
             >
               All pending ({followUps.length})
             </Link>
             <Link
               href="/follow-ups?filter=OVERDUE"
               className={cn('rounded-lg px-2.5 py-1.5 text-xs font-medium',
-                filter === 'OVERDUE' ? 'bg-rose-600 text-white' : 'bg-white text-ink-700 ring-1 ring-inset ring-ink-200 hover:bg-ink-50')}
+                filter === 'OVERDUE' ? 'bg-rose-600 text-white' : 'bg-ink-100 text-ink-700 ring-1 ring-inset ring-ink-200 hover:bg-ink-200 hover:text-white')}
             >
               Overdue ({overdue.length})
             </Link>

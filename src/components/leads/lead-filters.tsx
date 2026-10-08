@@ -109,7 +109,7 @@ function Select({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="rounded-lg border border-ink-200 bg-white px-2 py-1.5 text-xs text-ink-700 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100"
+        className="rounded-lg border border-ink-200 bg-[#0b021a] px-2 py-1.5 text-xs text-ink-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
       >
         <option value="">{label}: All</option>
         {options.map((option) => (
