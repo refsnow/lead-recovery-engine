@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import {
-  Play, Pause, ChevronRight, ChevronLeft, RotateCcw,
-  Sparkles, CheckCircle2, ArrowRight, Zap, Flame, ShieldAlert,
-  Send, Bot, Gauge, CalendarClock, UserCheck, Inbox,
+  Play, Pause, RotateCcw, CheckCircle2, ArrowRight,
+  Inbox, Send, Bot, Gauge, CalendarClock, Flame, Zap,
 } from 'lucide-react';
 
 export interface StepData {
@@ -22,6 +21,7 @@ export interface StepData {
     tag: string;
   };
   metrics: { value: string; label: string };
+  coasterFeature: string;
 }
 
 export const PIPELINE_STEPS: StepData[] = [
@@ -29,10 +29,11 @@ export const PIPELINE_STEPS: StepData[] = [
     step: 1,
     id: 'capture',
     title: 'Capture',
-    tagline: 'Instant Ingestion & Deduplication',
+    tagline: 'Launch Hill • Deduplication',
     body: 'Leads arrive from Meta Lead Ads, your website, portals and walk-ins into one pipeline, deduplicated on arrival.',
     icon: Inbox,
-    badge: 'Step 1 • Ingestion',
+    badge: 'Station 1 • Ingestion',
+    coasterFeature: 'Initial Launch Hill',
     details: [
       'Meta Lead Ads webhook (< 1s sync)',
       'Phone & email deduplication check',
@@ -49,10 +50,11 @@ export const PIPELINE_STEPS: StepData[] = [
     step: 2,
     id: 'respond',
     title: 'Respond',
-    tagline: 'Sub-minute WhatsApp Engagement',
+    tagline: 'High-speed First Drop',
     body: 'An automated first response goes out immediately through approved business messaging — before the lead contacts a competitor.',
     icon: Send,
-    badge: 'Step 2 • First Touch',
+    badge: 'Station 2 • First Touch',
+    coasterFeature: 'Steep Speed Drop',
     details: [
       'Official WhatsApp Business Platform',
       'Sub-60s speed-to-lead response',
@@ -69,10 +71,11 @@ export const PIPELINE_STEPS: StepData[] = [
     step: 3,
     id: 'qualify',
     title: 'Qualify',
-    tagline: 'Guardrailed AI Fact Gathering',
+    tagline: 'Ascent & Banking Curve',
     body: 'The assistant collects location, configuration, budget, timeline and intent, answering only from your approved knowledge base.',
     icon: Bot,
-    badge: 'Step 3 • AI Qualification',
+    badge: 'Station 3 • AI Qualification',
+    coasterFeature: 'High-G Banked Turn',
     details: [
       'Extracts 3BHK, budget ₹2.2 Cr, 30d decision',
       'Strictly grounded in approved facts',
@@ -89,10 +92,11 @@ export const PIPELINE_STEPS: StepData[] = [
     step: 4,
     id: 'score-route',
     title: 'Score and route',
-    tagline: 'Intent Scoring & Instant Rep Notification',
+    tagline: 'Apex Camelback Crest',
     body: 'Each lead is scored on configurable signals and assigned to a salesperson, who is notified straight away.',
     icon: Gauge,
-    badge: 'Step 4 • Routing',
+    badge: 'Station 4 • Routing',
+    coasterFeature: 'Camelback Airtime Hill',
     details: [
       '0–100 explainable buying intent score',
       'Capacity-aware rep routing',
@@ -109,10 +113,11 @@ export const PIPELINE_STEPS: StepData[] = [
     step: 5,
     id: 'follow-up',
     title: 'Follow up',
-    tagline: 'Multi-touch Cadence & SLA Auditing',
+    tagline: 'Skyline Horseshoe Curve',
     body: 'A configurable cadence runs until the lead replies or books a visit. Overdue human follow-ups escalate to the manager.',
     icon: CalendarClock,
-    badge: 'Step 5 • Cadence',
+    badge: 'Station 5 • Cadence',
+    coasterFeature: 'Skyline Overbanked Turn',
     details: [
       'Automated site visit reminder sequence',
       'Missed callback timer tracks follow-through',
@@ -129,10 +134,11 @@ export const PIPELINE_STEPS: StepData[] = [
     step: 6,
     id: 'recover',
     title: 'Recover',
-    tagline: 'Stalled Lead Salvage & Re-activation',
+    tagline: 'Loop-de-loop Recovery Climb',
     body: 'Uncontacted, overdue, dormant, unowned and high-intent-inactive leads are surfaced as ranked alerts with the action attached.',
     icon: Flame,
-    badge: 'Step 6 • Recovery Loop',
+    badge: 'Station 6 • Recovery Loop',
+    coasterFeature: 'The Inversion Loop',
     details: [
       '5 continuous risk detection rules',
       'One-click WhatsApp salvage prompt',
@@ -147,264 +153,564 @@ export const PIPELINE_STEPS: StepData[] = [
   },
 ];
 
-const STEP_DURATION_MS = 3800; // Time spent at each step before ball moves
+// Rollercoaster track waypoints (viewBox: 0 0 1000 360)
+// Defines the rollercoaster path with hills, drops, curves and loops
+const COASTER_WAYPOINTS = [
+  { x: 90,  y: 120, station: 0 },  // Station 1: Capture (Launch hill)
+  { x: 180, y: 60 },               // First lift hill peak
+  { x: 260, y: 240, station: 1 },  // Station 2: Respond (Steep valley drop)
+  { x: 350, y: 190 },              // Dip exit
+  { x: 440, y: 90,  station: 2 },  // Station 3: Qualify (Banking crest)
+  { x: 540, y: 170 },              // Descent
+  { x: 640, y: 250, station: 3 },  // Station 4: Score & Route (Low speed curve)
+  { x: 740, y: 160 },              // Rise
+  { x: 840, y: 80,  station: 4 },  // Station 5: Follow up (High turnaround)
+  { x: 920, y: 180 },              // Outer helix drop
+  { x: 880, y: 290 },              // Bottom sweep
+  { x: 670, y: 320, station: 5 },  // Station 6: Recover (Loop recovery)
+  { x: 430, y: 300 },              // Return sweep
+  { x: 230, y: 280 },              // Upward return rise
+  { x: 120, y: 220 },              // Curve leading back into Station 1
+];
+
+/** Convert waypoints to an organic, continuous closed Catmull-Rom cubic bezier SVG path */
+function generateClosedSplinePath(points: { x: number; y: number }[]): string {
+  const n = points.length;
+  if (n < 3) return '';
+
+  let path = `M ${points[0].x} ${points[0].y}`;
+  const tension = 0.85;
+
+  for (let i = 0; i < n; i++) {
+    const p0 = points[(i - 1 + n) % n];
+    const p1 = points[i];
+    const p2 = points[(i + 1) % n];
+    const p3 = points[(i + 2) % n];
+
+    const cp1x = p1.x + ((p2.x - p0.x) / 6) * tension;
+    const cp1y = p1.y + ((p2.y - p0.y) / 6) * tension;
+    const cp2x = p2.x - ((p3.x - p1.x) / 6) * tension;
+    const cp2y = p2.y - ((p3.y - p1.y) / 6) * tension;
+
+    path += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+  }
+
+  path += ' Z';
+  return path;
+}
+
+// Support struts from track points down to ground base line (y=340)
+const SUPPORT_STRUTS = [
+  { x: 180, topY: 60 },
+  { x: 350, topY: 190 },
+  { x: 440, topY: 90 },
+  { x: 540, topY: 170 },
+  { x: 740, topY: 160 },
+  { x: 840, topY: 80 },
+  { x: 920, topY: 180 },
+  { x: 230, topY: 280 },
+];
+
+const TOTAL_LOOP_DURATION_MS = 22000; // 22 seconds for a complete thrilling rollercoaster lap
 
 export function HowItWorksLoop() {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStation, setActiveStation] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const animFrameRef = useRef<number | null>(null);
-  const lastTimeRef = useRef<number | null>(null);
+  const [ballPos, setBallPos] = useState({ x: 90, y: 120, angle: 0 });
+  const [progressPercent, setProgressPercent] = useState(0);
 
-  // Smooth progress bar and step advancing loop
+  const pathRef = useRef<SVGPathElement>(null);
+  const animRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const elapsedOffsetRef = useRef<number>(0);
+  const totalLengthRef = useRef<number>(0);
+
+  // Generate the rollercoaster spline path once
+  const trackPathD = useMemo(() => generateClosedSplinePath(COASTER_WAYPOINTS), []);
+
+  // Compute station positions along the path on mount
+  const stationDistancesRef = useRef<number[]>([]);
+
   useEffect(() => {
-    if (!isPlaying || isHovered) {
-      lastTimeRef.current = null;
+    const path = pathRef.current;
+    if (!path) return;
+
+    const totalLen = path.getTotalLength();
+    totalLengthRef.current = totalLen;
+
+    // Find closest distance on path for each station waypoint
+    const stationCoords = [
+      COASTER_WAYPOINTS[0],
+      COASTER_WAYPOINTS[2],
+      COASTER_WAYPOINTS[4],
+      COASTER_WAYPOINTS[6],
+      COASTER_WAYPOINTS[8],
+      COASTER_WAYPOINTS[11],
+    ];
+
+    // Sample path to map each station to path distance
+    const samples = 400;
+    const distances: number[] = [0, 0, 0, 0, 0, 0];
+
+    stationCoords.forEach((st, stIdx) => {
+      let minDist = Infinity;
+      let bestLen = 0;
+      for (let s = 0; s <= samples; s++) {
+        const d = (s / samples) * totalLen;
+        const pt = path.getPointAtLength(d);
+        const distSq = (pt.x - st.x) ** 2 + (pt.y - st.y) ** 2;
+        if (distSq < minDist) {
+          minDist = distSq;
+          bestLen = d;
+        }
+      }
+      distances[stIdx] = bestLen;
+    });
+
+    stationDistancesRef.current = distances;
+  }, [trackPathD]);
+
+  // Main continuous rollercoaster animation loop: PLAYS ON ITS OWN PERPETUALLY
+  useEffect(() => {
+    if (!isPlaying) {
+      startTimeRef.current = null;
       return;
     }
 
-    const updateTimer = (time: number) => {
-      if (lastTimeRef.current === null) {
-        lastTimeRef.current = time;
+    const animateCoaster = (timestamp: number) => {
+      if (startTimeRef.current === null) {
+        startTimeRef.current = timestamp - elapsedOffsetRef.current;
       }
 
-      const elapsed = time - lastTimeRef.current;
-      const stepPct = Math.min(100, (elapsed / STEP_DURATION_MS) * 100);
-      setProgress(stepPct);
+      const totalElapsed = (timestamp - startTimeRef.current) % TOTAL_LOOP_DURATION_MS;
+      elapsedOffsetRef.current = totalElapsed;
 
-      if (elapsed >= STEP_DURATION_MS) {
-        lastTimeRef.current = time;
-        setProgress(0);
-        setActiveStep((prev) => (prev + 1) % PIPELINE_STEPS.length);
-      } else {
-        animFrameRef.current = requestAnimationFrame(updateTimer);
+      const progress = totalElapsed / TOTAL_LOOP_DURATION_MS;
+      setProgressPercent(progress * 100);
+
+      const path = pathRef.current;
+      if (path && totalLengthRef.current > 0) {
+        const currentDist = progress * totalLengthRef.current;
+        const pt = path.getPointAtLength(currentDist);
+
+        // Calculate tangent angle for head orientation
+        const aheadDist = (currentDist + 3) % totalLengthRef.current;
+        const ptAhead = path.getPointAtLength(aheadDist);
+        const angle = Math.atan2(ptAhead.y - pt.y, ptAhead.x - pt.x) * (180 / Math.PI);
+
+        setBallPos({ x: pt.x, y: pt.y, angle });
+
+        // Determine which station is active based on proximity
+        const distances = stationDistancesRef.current;
+        if (distances.length === 6) {
+          let closestIdx = 0;
+          let minDelta = Infinity;
+
+          distances.forEach((stDist, idx) => {
+            // Circular distance on path
+            const diff = Math.abs(currentDist - stDist);
+            const wrappedDiff = Math.min(diff, totalLengthRef.current - diff);
+            if (wrappedDiff < minDelta) {
+              minDelta = wrappedDiff;
+              closestIdx = idx;
+            }
+          });
+
+          setActiveStation(closestIdx);
+        }
       }
+
+      animRef.current = requestAnimationFrame(animateCoaster);
     };
 
-    animFrameRef.current = requestAnimationFrame(updateTimer);
+    animRef.current = requestAnimationFrame(animateCoaster);
 
     return () => {
-      if (animFrameRef.current !== null) {
-        cancelAnimationFrame(animFrameRef.current);
+      if (animRef.current !== null) {
+        cancelAnimationFrame(animRef.current);
       }
     };
-  }, [isPlaying, isHovered, activeStep]);
+  }, [isPlaying]);
 
-  const handleSelectStep = (index: number) => {
-    setActiveStep(index);
-    setProgress(0);
-    lastTimeRef.current = null;
+  // Jump coaster directly to a station when clicked
+  const handleJumpToStation = (stationIdx: number) => {
+    const distances = stationDistancesRef.current;
+    if (distances.length === 6 && totalLengthRef.current > 0) {
+      const targetDist = distances[stationIdx];
+      const targetProgress = targetDist / totalLengthRef.current;
+      elapsedOffsetRef.current = targetProgress * TOTAL_LOOP_DURATION_MS;
+      startTimeRef.current = null;
+      setActiveStation(stationIdx);
+    }
   };
 
-  const handlePrev = () => {
-    setActiveStep((prev) => (prev - 1 + PIPELINE_STEPS.length) % PIPELINE_STEPS.length);
-    setProgress(0);
-    lastTimeRef.current = null;
-  };
-
-  const handleNext = () => {
-    setActiveStep((prev) => (prev + 1) % PIPELINE_STEPS.length);
-    setProgress(0);
-    lastTimeRef.current = null;
-  };
-
-  // Ball progress position across the continuous 6-station track (0 to 100%)
-  const overallTrackPercent = ((activeStep + progress / 100) / PIPELINE_STEPS.length) * 100;
-  const currentStepData = PIPELINE_STEPS[activeStep];
+  const currentStep = PIPELINE_STEPS[activeStation];
 
   return (
-    <div
-      className="relative mt-8"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* ── TOP PIPELINE CONTROL BAR & CLOSED-LOOP TRACK ────────────────── */}
-      <div className="relative mb-8 overflow-hidden rounded-2xl border border-brand-500/20 bg-gradient-to-r from-[#120326] via-[#0d011d] to-[#120326] p-4 shadow-xl shadow-brand-950/40 backdrop-blur-md sm:p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* Loop status info */}
+    <div className="relative mt-8">
+      {/* ── ROLLERCOASTER HUD & FLUID SVG CIRCUIT ──────────────────────── */}
+      <div className="relative overflow-hidden rounded-3xl border border-brand-500/30 bg-gradient-to-b from-[#130328] via-[#090117] to-[#060010] p-4 shadow-2xl shadow-brand-950/70 sm:p-6">
+        {/* Background ambient stars and aurora rays */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <div className="aurora-blob -left-20 top-0 h-64 w-64 bg-brand-500/20 blur-3xl" />
+          <div className="aurora-blob -right-20 bottom-0 h-64 w-64 bg-[#e879f9]/15 blur-3xl" />
+          {/* Subtle grid mesh */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#5b21b615_1px,transparent_1px),linear-gradient(to_bottom,#5b21b615_1px,transparent_1px)] bg-[size:32px_32px]" />
+        </div>
+
+        {/* Rollercoaster Header Strip */}
+        <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <span className="relative flex h-3 w-3">
-              <span className={`absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75 ${isPlaying && !isHovered ? 'animate-ping' : ''}`} />
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-brand-500 shadow-glow" />
+            <span className="relative flex h-3.5 w-3.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-[#e879f9] opacity-75 animate-ping" />
+              <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-brand-400 shadow-glow" />
             </span>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-brand-300">
-                  Continuous Leadloop Pipeline
+                <span className="text-sm font-bold tracking-wider uppercase text-white">
+                  Leadloop Rollercoaster Circuit
                 </span>
-                <span className="hidden rounded-full border border-brand-500/30 bg-brand-950/60 px-2 py-0.5 text-[10px] font-medium text-brand-300 sm:inline-block">
-                  Perpetual Cycle
+                <span className="rounded-full border border-brand-400/40 bg-brand-950/80 px-2 py-0.5 text-[10px] font-semibold text-[#e879f9] shadow-glow">
+                  Auto-Playing Loop
                 </span>
               </div>
               <p className="text-xs text-ink-500">
-                Simulating live lead: <span className="font-medium text-ink-900">Rahul Sharma (Gurugram 3BHK)</span>
+                Current Feature: <span className="font-semibold text-brand-300">{currentStep.coasterFeature}</span>
+                {' • '}
+                Lead in transit: <span className="font-medium text-white">Rahul Sharma (#LD-9042)</span>
               </p>
             </div>
           </div>
 
-          {/* Interactive controls: Play/Pause, Prev, Next */}
+          {/* Interactive loop controls */}
           <div className="flex items-center gap-2 self-end sm:self-auto">
             <button
               type="button"
-              onClick={handlePrev}
-              aria-label="Previous step"
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-200/80 bg-ink-100 text-ink-600 transition-colors hover:border-brand-500/50 hover:bg-brand-950/40 hover:text-white"
+              onClick={() => handleJumpToStation(0)}
+              className="flex items-center gap-1 rounded-lg border border-ink-200/80 bg-ink-100/90 px-2.5 py-1.5 text-xs text-ink-600 transition-colors hover:border-brand-500/50 hover:bg-brand-950/60 hover:text-white"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <RotateCcw className="h-3 w-3" />
+              <span className="hidden sm:inline">Reset Loop</span>
             </button>
             <button
               type="button"
               onClick={() => setIsPlaying((p) => !p)}
-              className="flex items-center gap-1.5 rounded-lg border border-brand-500/30 bg-brand-950/60 px-3 py-1.5 text-xs font-medium text-brand-200 transition-all hover:border-brand-500/60 hover:bg-brand-900/60 hover:text-white"
+              className="flex items-center gap-1.5 rounded-lg border border-brand-500/40 bg-brand-950/90 px-3 py-1.5 text-xs font-semibold text-brand-200 transition-all hover:border-brand-400 hover:bg-brand-900/80 hover:text-white shadow-glow"
             >
-              {isPlaying && !isHovered ? (
+              {isPlaying ? (
                 <>
-                  <Pause className="h-3.5 w-3.5 text-brand-400" />
-                  <span className="hidden sm:inline">Pause</span>
+                  <Pause className="h-3.5 w-3.5 text-[#e879f9]" />
+                  <span>Pause</span>
                 </>
               ) : (
                 <>
                   <Play className="h-3.5 w-3.5 fill-current text-brand-400" />
-                  <span className="hidden sm:inline">Play Loop</span>
+                  <span>Resume Ride</span>
                 </>
               )}
             </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Next step"
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-200/80 bg-ink-100 text-ink-600 transition-colors hover:border-brand-500/50 hover:bg-brand-950/40 hover:text-white"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
           </div>
         </div>
 
-        {/* ── THE LOOP TRACK WITH GLOWING TRAVELING BALL ─────────────────── */}
-        <div className="relative mt-5 pt-3 pb-2">
-          {/* Base rail track */}
-          <div className="relative h-2 w-full overflow-hidden rounded-full bg-ink-200/60">
-            {/* Illuminated trail behind the ball */}
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-brand-600 via-brand-400 to-[#e879f9] transition-all duration-75"
-              style={{ width: `${overallTrackPercent}%` }}
-            />
-          </div>
-
-          {/* THE TRAVELING BALL (ORB) */}
-          <div
-            className="pointer-events-none absolute top-1.5 z-20 -translate-x-1/2 transition-all duration-75"
-            style={{ left: `${overallTrackPercent}%` }}
+        {/* ── THE ROLLERCOASTER SVG CANVAS ──────────────────────────────── */}
+        <div className="relative z-10 mt-4 h-64 w-full sm:h-80 md:h-96">
+          <svg
+            viewBox="0 0 1000 360"
+            className="h-full w-full overflow-visible select-none"
+            preserveAspectRatio="xMidYMid meet"
           >
-            <div className="relative flex items-center justify-center">
-              {/* Outer soft glowing aura */}
-              <div className="absolute h-9 w-9 rounded-full bg-brand-400/30 blur-md" />
-              {/* Pulsing ring */}
-              <div className="absolute h-6 w-6 animate-ping rounded-full bg-[#e879f9]/40" />
-              {/* Solid core orb */}
-              <div className="relative h-5 w-5 rounded-full border-2 border-white bg-gradient-to-br from-[#e879f9] via-brand-400 to-brand-600 shadow-[0_0_15px_#e879f9]" />
-            </div>
-          </div>
+            <defs>
+              {/* Neon Glow Filters */}
+              <filter id="coasterGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
 
-          {/* 6 Step Station Nodes along the track */}
-          <div className="mt-3 grid grid-cols-6 gap-1">
-            {PIPELINE_STEPS.map((s, idx) => {
-              const isActive = idx === activeStep;
-              const isPassed = idx < activeStep;
+              <filter id="ballSuperGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="blur1" />
+                <feGaussianBlur stdDeviation="16" result="blur2" />
+                <feMerge>
+                  <feMergeNode in="blur2" />
+                  <feMergeNode in="blur1" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              {/* Rollercoaster track tie pattern */}
+              <linearGradient id="railGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#5B21B6" />
+                <stop offset="30%" stopColor="#A855F7" />
+                <stop offset="70%" stopColor="#E879F9" />
+                <stop offset="100%" stopColor="#5B21B6" />
+              </linearGradient>
+
+              {/* Station Active Glow Gradient */}
+              <radialGradient id="stationFlare" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#e879f9" stopOpacity="0.8" />
+                <stop offset="60%" stopColor="#a855f7" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#5b21b6" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+
+            {/* 1. GROUND FOUNDATION & GRID HORIZON */}
+            <line x1="50" y1="340" x2="950" y2="340" stroke="#5B21B6" strokeWidth="2" strokeOpacity="0.4" strokeDasharray="6 6" />
+
+            {/* 2. ROLLERCOASTER STEEL TRUSS SUPPORT STRUTS */}
+            {SUPPORT_STRUTS.map((strut, i) => (
+              <g key={i} opacity="0.35">
+                {/* Main vertical pylon */}
+                <line x1={strut.x} y1={strut.topY} x2={strut.x} y2="340" stroke="#7C3AED" strokeWidth="2.5" />
+                {/* Diagonal lattice truss cross-braces */}
+                <line x1={strut.x - 12} y1={strut.topY + 30} x2={strut.x + 12} y2={strut.topY + 60} stroke="#5B21B6" strokeWidth="1" />
+                <line x1={strut.x + 12} y1={strut.topY + 30} x2={strut.x - 12} y2={strut.topY + 60} stroke="#5B21B6" strokeWidth="1" />
+                <line x1={strut.x - 12} y1={strut.topY + 90} x2={strut.x + 12} y2={strut.topY + 130} stroke="#5B21B6" strokeWidth="1" />
+                <line x1={strut.x + 12} y1={strut.topY + 90} x2={strut.x - 12} y2={strut.topY + 130} stroke="#5B21B6" strokeWidth="1" />
+                {/* Concrete footing anchor */}
+                <rect x={strut.x - 8} y="335" width="16" height="6" rx="2" fill="#3B0764" stroke="#7C3AED" strokeWidth="1" />
+              </g>
+            ))}
+
+            {/* 3. ROLLERCOASTER TRACK LAYER 1: Deep ambient purple backlight */}
+            <path
+              d={trackPathD}
+              fill="none"
+              stroke="#5B21B6"
+              strokeWidth="24"
+              strokeOpacity="0.25"
+              filter="url(#coasterGlow)"
+            />
+
+            {/* 4. ROLLERCOASTER TRACK LAYER 2: Ladder Sleepers / Ties (Crossbars) */}
+            <path
+              d={trackPathD}
+              fill="none"
+              stroke="#4C1D95"
+              strokeWidth="14"
+              strokeDasharray="3 14"
+              strokeLinecap="round"
+              strokeOpacity="0.85"
+            />
+
+            {/* 5. ROLLERCOASTER TRACK LAYER 3: Dual Tubular Steel Steel Rails */}
+            {/* Top/Outer rail */}
+            <path
+              d={trackPathD}
+              fill="none"
+              stroke="#2E1065"
+              strokeWidth="8"
+            />
+            {/* 6. ROLLERCOASTER TRACK LAYER 4: Glowing Electric Guide Rail */}
+            <path
+              ref={pathRef}
+              d={trackPathD}
+              fill="none"
+              stroke="url(#railGrad)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              filter="url(#coasterGlow)"
+            />
+
+            {/* 7. THE 6 ROLLERCOASTER STATIONS (GANTRY TOWERS & GATES) */}
+            {[
+              { x: 90,  y: 120, num: 1, name: 'Capture' },
+              { x: 260, y: 240, num: 2, name: 'Respond' },
+              { x: 440, y: 90,  num: 3, name: 'Qualify' },
+              { x: 640, y: 250, num: 4, name: 'Score & Route' },
+              { x: 840, y: 80,  num: 5, name: 'Follow up' },
+              { x: 670, y: 320, num: 6, name: 'Recover' },
+            ].map((st, idx) => {
+              const isStationActive = idx === activeStation;
+
               return (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => handleSelectStep(idx)}
-                  className="group relative flex flex-col items-center text-center transition-transform hover:scale-105"
+                <g
+                  key={st.num}
+                  className="cursor-pointer transition-transform duration-200"
+                  onClick={() => handleJumpToStation(idx)}
                 >
-                  <div
-                    className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold transition-all ${
-                      isActive
-                        ? 'border border-brand-300 bg-brand-500 text-white shadow-glow'
-                        : isPassed
-                        ? 'border border-brand-500/40 bg-brand-950/70 text-brand-300'
-                        : 'border border-ink-200/80 bg-ink-100 text-ink-500 group-hover:border-brand-500/40 group-hover:text-ink-900'
-                    }`}
+                  {/* Station active radiating flare */}
+                  {isStationActive && (
+                    <circle
+                      cx={st.x}
+                      cy={st.y}
+                      r="40"
+                      fill="url(#stationFlare)"
+                      className="animate-pulse"
+                    />
+                  )}
+
+                  {/* Station base platform ring */}
+                  <circle
+                    cx={st.x}
+                    cy={st.y}
+                    r={isStationActive ? 22 : 16}
+                    fill={isStationActive ? '#1e053a' : '#0c0218'}
+                    stroke={isStationActive ? '#E879F9' : '#5B21B6'}
+                    strokeWidth={isStationActive ? 2.5 : 1.5}
+                    className="transition-all duration-300"
+                    filter={isStationActive ? 'url(#coasterGlow)' : undefined}
+                  />
+
+                  {/* Station Number Badge */}
+                  <circle
+                    cx={st.x}
+                    cy={st.y}
+                    r={isStationActive ? 14 : 11}
+                    fill={isStationActive ? 'url(#railGrad)' : '#1e0b38'}
+                  />
+                  <text
+                    x={st.x}
+                    y={st.y + 4}
+                    textAnchor="middle"
+                    fontSize={isStationActive ? '11' : '9'}
+                    fontWeight="bold"
+                    fill="#FFFFFF"
+                    className="select-none pointer-events-none"
                   >
-                    {s.step}
-                  </div>
-                  <span
-                    className={`mt-1.5 hidden text-[11px] font-medium transition-colors sm:block ${
-                      isActive
-                        ? 'text-brand-300 font-semibold'
-                        : 'text-ink-500 group-hover:text-ink-800'
-                    }`}
+                    {st.num}
+                  </text>
+
+                  {/* Station Name Label Pill */}
+                  <rect
+                    x={st.x - 38}
+                    y={st.y > 220 ? st.y - 36 : st.y + 24}
+                    width="76"
+                    height="18"
+                    rx="9"
+                    fill={isStationActive ? '#2c0b52' : '#0c0218'}
+                    stroke={isStationActive ? '#E879F9' : '#4C1D95'}
+                    strokeWidth="1"
+                    className="transition-all"
+                  />
+                  <text
+                    x={st.x}
+                    y={st.y > 220 ? st.y - 24 : st.y + 36}
+                    textAnchor="middle"
+                    fontSize="9"
+                    fontWeight={isStationActive ? 'bold' : 'normal'}
+                    fill={isStationActive ? '#E879F9' : '#C4B5FD'}
+                    className="select-none pointer-events-none"
                   >
-                    {s.title}
-                  </span>
-                </button>
+                    {st.name}
+                  </text>
+                </g>
               );
             })}
-          </div>
+
+            {/* 8. THE ROLLERCOASTER TRAVELING BALL (ORB VEHICLE) */}
+            <g
+              transform={`translate(${ballPos.x}, ${ballPos.y}) rotate(${ballPos.angle})`}
+              className="pointer-events-none"
+            >
+              {/* Forward coaster headlight beam */}
+              <polygon
+                points="10,0 60,-18 60,18"
+                fill="url(#stationFlare)"
+                opacity="0.5"
+              />
+
+              {/* Trailing coaster sparks / speed particles */}
+              <circle cx="-16" cy="0" r="4" fill="#A855F7" opacity="0.6" />
+              <circle cx="-26" cy="-2" r="2.5" fill="#E879F9" opacity="0.4" />
+              <circle cx="-34" cy="2" r="1.5" fill="#C084FC" opacity="0.2" />
+
+              {/* Outer Energy Aura */}
+              <circle
+                cx="0"
+                cy="0"
+                r="18"
+                fill="#E879F9"
+                opacity="0.35"
+                filter="url(#ballSuperGlow)"
+              />
+
+              {/* Pulsing Core Ring */}
+              <circle
+                cx="0"
+                cy="0"
+                r="12"
+                fill="none"
+                stroke="#E879F9"
+                strokeWidth="2"
+                strokeDasharray="4 2"
+              />
+
+              {/* Rollercoaster Orb Shell */}
+              <circle
+                cx="0"
+                cy="0"
+                r="9"
+                fill="url(#railGrad)"
+                stroke="#FFFFFF"
+                strokeWidth="2"
+                filter="url(#ballSuperGlow)"
+              />
+
+              {/* Bright Visor Center */}
+              <circle cx="2" cy="0" r="3.5" fill="#FFFFFF" />
+            </g>
+          </svg>
         </div>
 
-        {/* Live event notification banner inside the track header */}
-        <div className="mt-3 flex items-center justify-between rounded-xl border border-brand-500/20 bg-[#090114]/90 px-3.5 py-2 text-xs">
+        {/* Rollercoaster Circuit Live Status Ticker */}
+        <div className="relative z-10 mt-3 flex items-center justify-between rounded-2xl border border-brand-500/20 bg-[#080014]/90 px-4 py-2.5 text-xs backdrop-blur-md">
           <div className="flex items-center gap-2 overflow-hidden">
-            <span className="flex h-2 w-2 shrink-0 rounded-full bg-[#e879f9] shadow-glow" />
-            <span className="truncate font-semibold text-brand-200">
-              Stage {currentStepData.step}: {currentStepData.simulatedEvent.label}
+            <span className="flex h-2.5 w-2.5 shrink-0 rounded-full bg-[#e879f9] shadow-glow animate-ping" />
+            <span className="font-semibold text-white">
+              Station {currentStep.step}: {currentStep.title} ({currentStep.coasterFeature})
             </span>
             <span className="hidden text-ink-600 md:inline">—</span>
             <span className="hidden truncate text-ink-400 md:inline">
-              {currentStepData.simulatedEvent.detail}
+              {currentStep.simulatedEvent.detail}
             </span>
           </div>
-          <span className="shrink-0 rounded-md bg-brand-950/80 px-2 py-0.5 text-[11px] font-medium text-brand-300 border border-brand-500/30">
-            {currentStepData.simulatedEvent.tag}
-          </span>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="rounded-md border border-brand-500/30 bg-brand-950/80 px-2 py-0.5 text-[11px] font-mono text-brand-300">
+              {currentStep.metrics.value}
+            </span>
+            <span className="hidden font-mono text-[10px] text-brand-400 sm:inline">
+              Lap: {progressPercent.toFixed(0)}%
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* ── THE 6 STEP CARDS (MATCHING 3x2 GRID WITH CLOSED-LOOP FLOW) ──── */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {/* ── THE 6 STEP CARDS SYNCHRONIZED WITH THE ROLLERCOASTER ─────────── */}
+      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {PIPELINE_STEPS.map((step, index) => {
-          const isActive = index === activeStep;
-          const isPassed = index < activeStep;
+          const isActive = index === activeStation;
           const Icon = step.icon;
 
           return (
             <div
               key={step.id}
-              onClick={() => handleSelectStep(index)}
+              onClick={() => handleJumpToStation(index)}
               className={`lift group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-5 transition-all duration-300 cursor-pointer ${
                 isActive
-                  ? 'border-brand-400 bg-gradient-to-br from-[#1b0638] via-[#100324] to-[#0a0118] shadow-[0_0_35px_rgba(168,85,247,0.35)] ring-1 ring-brand-400/50 scale-[1.02]'
+                  ? 'border-brand-400 bg-gradient-to-br from-[#1d063d] via-[#100324] to-[#0a0118] shadow-[0_0_40px_rgba(168,85,247,0.4)] ring-1 ring-brand-400/60 scale-[1.02]'
                   : 'border-ink-200 bg-ink-100 hover:border-brand-500/40 hover:bg-[#0f0322]'
               }`}
             >
-              {/* Active Step Top Progress Bar filling up */}
+              {/* Coaster station illuminated header line */}
               {isActive && (
-                <div className="absolute inset-x-0 top-0 h-1 bg-ink-200/40">
-                  <div
-                    className="h-full bg-gradient-to-r from-brand-500 via-brand-400 to-[#e879f9] transition-all duration-75"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-500 via-[#e879f9] to-brand-500 animate-pulse" />
               )}
 
-              {/* Card Header: Step badge and active indicator */}
               <div>
+                {/* Header: Station number, feature & live badge */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    {/* Step Number with Active Orb Glow */}
                     <div className="relative">
                       {isActive && (
-                        <span className="absolute -inset-1 rounded-xl bg-brand-400/40 animate-ping" />
+                        <span className="absolute -inset-1 rounded-xl bg-[#e879f9]/40 animate-ping" />
                       )}
                       <span
                         className={`relative flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold transition-all ${
                           isActive
-                            ? 'bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 text-white shadow-glow shadow-brand-500/60 ring-2 ring-white/50'
-                            : isPassed
-                            ? 'bg-brand-950/80 text-brand-300 border border-brand-500/30'
+                            ? 'bg-gradient-to-br from-[#e879f9] via-brand-500 to-brand-700 text-white shadow-glow shadow-brand-500/60 ring-2 ring-white/60'
                             : 'bg-ink-200/70 text-ink-500'
                         }`}
                       >
@@ -412,20 +718,24 @@ export function HowItWorksLoop() {
                       </span>
                     </div>
 
-                    <span
-                      className={`text-xs font-medium uppercase tracking-wider transition-colors ${
-                        isActive ? 'text-brand-300' : 'text-ink-500'
-                      }`}
-                    >
-                      {step.tagline}
-                    </span>
+                    <div>
+                      <span
+                        className={`block text-xs font-semibold tracking-wider uppercase transition-colors ${
+                          isActive ? 'text-[#e879f9]' : 'text-ink-500'
+                        }`}
+                      >
+                        {step.coasterFeature}
+                      </span>
+                      <span className="text-[10px] text-ink-600">
+                        {step.tagline}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Active glowing indicator pill */}
                   {isActive ? (
-                    <span className="flex items-center gap-1.5 rounded-full border border-brand-400/40 bg-brand-950/90 px-2.5 py-1 text-[11px] font-semibold text-[#e879f9] shadow-glow">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#e879f9] animate-pulse" />
-                      Active
+                    <span className="flex items-center gap-1.5 rounded-full border border-brand-400/50 bg-brand-950/90 px-2.5 py-1 text-[11px] font-semibold text-[#e879f9] shadow-glow">
+                      <Zap className="h-3 w-3 fill-current text-[#e879f9]" />
+                      At Station
                     </span>
                   ) : (
                     <span className="text-[11px] text-ink-500 transition-colors group-hover:text-brand-300">
@@ -446,7 +756,7 @@ export function HowItWorksLoop() {
                   {step.body}
                 </p>
 
-                {/* Key capability bullet points */}
+                {/* Key capability checklist */}
                 <ul className="mt-3.5 space-y-1.5">
                   {step.details.map((detail) => (
                     <li key={detail} className="flex items-center gap-2 text-xs text-ink-400">
@@ -466,7 +776,7 @@ export function HowItWorksLoop() {
                 <div
                   className={`rounded-xl p-3 text-xs transition-all ${
                     isActive
-                      ? 'border border-brand-500/30 bg-[#0c021a] text-brand-200'
+                      ? 'border border-brand-500/40 bg-[#0c021a] text-brand-200 shadow-inner'
                       : 'border border-transparent bg-ink-200/30 text-ink-500'
                   }`}
                 >
@@ -491,7 +801,7 @@ export function HowItWorksLoop() {
               {isActive && (
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -bottom-10 -right-10 h-32 w-32 rounded-full bg-brand-500/20 blur-2xl"
+                  className="pointer-events-none absolute -bottom-10 -right-10 h-32 w-32 rounded-full bg-brand-500/25 blur-2xl"
                 />
               )}
             </div>
@@ -502,13 +812,13 @@ export function HowItWorksLoop() {
       {/* ── LOOP RETURN FOOTER BANNER ───────────────────────────────────── */}
       <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-2xl border border-brand-500/20 bg-gradient-to-r from-brand-950/40 via-ink-100 to-brand-950/40 px-5 py-3 text-xs sm:flex-row">
         <div className="flex items-center gap-2.5 text-ink-400">
-          <RotateCcw className="h-4 w-4 text-brand-400 animate-spin-slow" />
+          <RotateCcw className="h-4 w-4 text-[#e879f9] animate-spin-slow" />
           <span>
-            <strong className="text-ink-900 font-semibold">Continuous Recovery Circuit:</strong> Leads that stall at Step 5 immediately route into Step 6 (Recovery), and re-enter Step 1 without dropping out.
+            <strong className="text-white font-semibold">Continuous Rollercoaster Circuit:</strong> When a lead finishes Station 6 (Recovery), the loop swoops back to Station 1 (Capture) — an infinite, closed recovery pipeline.
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-brand-300 font-medium">
-          <span>0 leads lost to silence</span>
+          <span>Perpetual Motion • Zero Dropped Leads</span>
           <ArrowRight className="h-3.5 w-3.5" />
         </div>
       </div>
