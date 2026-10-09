@@ -203,14 +203,112 @@ class CoasterAudioEngine {
       osc.frequency.setValueAtTime(freq, noteTime);
 
       gain.gain.setValueAtTime(0.09, noteTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + 0.8);
-
       osc.connect(gain);
       gain.connect(this.masterGain);
 
       osc.start(noteTime);
       osc.stop(noteTime + 0.8);
     });
+
+    // Trigger the iconic coaster celebration "WOHOOO!"
+    this.playWoohoo(startTime);
+  }
+
+  /**
+   * Energetic "WOHOOO!" celebratory sound effect
+   * Combines synthesized vocal formant pitch swoops with native speech synthesis
+   */
+  public playWoohoo(startTime?: number) {
+    // 1. Browser vocal exclamation "Woohoo!"
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance('Woohoo!');
+        utter.pitch = 1.7; // excited high pitch
+        utter.rate = 1.35; // fast energetic delivery
+        utter.volume = 1.0;
+        window.speechSynthesis.speak(utter);
+      } catch {
+        // Fallback to Web Audio synthesis
+      }
+    }
+
+    // 2. Synthesized vocal formant "Woo-Hooo!" curve
+    if (!this.ctx || !this.masterGain) return;
+
+    try {
+      const now = startTime ?? this.ctx.currentTime;
+
+      // "WOO" part (rising vocal curve 380Hz -> 620Hz)
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      const filter1 = this.ctx.createBiquadFilter();
+
+      filter1.type = 'bandpass';
+      filter1.Q.setValueAtTime(3.5, now);
+      filter1.frequency.setValueAtTime(600, now);
+      filter1.frequency.linearRampToValueAtTime(900, now + 0.18);
+
+      osc1.type = 'sawtooth';
+      osc1.frequency.setValueAtTime(380, now);
+      osc1.frequency.exponentialRampToValueAtTime(620, now + 0.18);
+
+      gain1.gain.setValueAtTime(0.001, now);
+      gain1.gain.linearRampToValueAtTime(0.18, now + 0.04);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+      osc1.connect(filter1);
+      filter1.connect(gain1);
+      gain1.connect(this.masterGain);
+
+      osc1.start(now);
+      osc1.stop(now + 0.22);
+
+      // "HOOO!" part (soaring curve 700Hz -> 1080Hz -> 680Hz)
+      const tHoo = now + 0.22;
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      const filter2 = this.ctx.createBiquadFilter();
+
+      filter2.type = 'bandpass';
+      filter2.Q.setValueAtTime(4.0, tHoo);
+      filter2.frequency.setValueAtTime(1100, tHoo);
+      filter2.frequency.linearRampToValueAtTime(1500, tHoo + 0.2);
+      filter2.frequency.linearRampToValueAtTime(950, tHoo + 0.55);
+
+      osc2.type = 'sawtooth';
+      osc2.frequency.setValueAtTime(700, tHoo);
+      osc2.frequency.exponentialRampToValueAtTime(1080, tHoo + 0.16);
+      osc2.frequency.exponentialRampToValueAtTime(680, tHoo + 0.55);
+
+      gain2.gain.setValueAtTime(0.001, tHoo);
+      gain2.gain.linearRampToValueAtTime(0.22, tHoo + 0.06);
+      gain2.gain.exponentialRampToValueAtTime(0.001, tHoo + 0.55);
+
+      osc2.connect(filter2);
+      filter2.connect(gain2);
+      gain2.connect(this.masterGain);
+
+      osc2.start(tHoo);
+      osc2.stop(tHoo + 0.55);
+
+      // Sparkle shimmer tone
+      const shimmer = this.ctx.createOscillator();
+      const shimmerGain = this.ctx.createGain();
+      shimmer.type = 'sine';
+      shimmer.frequency.setValueAtTime(1318.51, tHoo);
+      shimmer.frequency.exponentialRampToValueAtTime(1760, tHoo + 0.4);
+      shimmerGain.gain.setValueAtTime(0.08, tHoo);
+      shimmerGain.gain.exponentialRampToValueAtTime(0.0001, tHoo + 0.5);
+
+      shimmer.connect(shimmerGain);
+      shimmerGain.connect(this.masterGain);
+
+      shimmer.start(tHoo);
+      shimmer.stop(tHoo + 0.5);
+    } catch {
+      // Ignore
+    }
   }
 
   /** Set master volume (0.0 to 1.0) */

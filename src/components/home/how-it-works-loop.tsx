@@ -717,6 +717,46 @@ export function HowItWorksLoop() {
               {/* Bright Visor Center */}
               <circle cx="2" cy="0" r="3.5" fill="#FFFFFF" />
             </g>
+
+            {/* 9. WOHOOO! CELEBRATION BURST OVER RECOVERED LEAD */}
+            {activeStation === 5 && (
+              <g
+                transform={`translate(${ballPos.x}, ${ballPos.y - 42})`}
+                className="pointer-events-none select-none transition-all duration-300"
+              >
+                {/* Glowing drop shadow backdrop */}
+                <rect
+                  x="-75"
+                  y="-16"
+                  width="150"
+                  height="30"
+                  rx="15"
+                  fill="#2c054e"
+                  stroke="#E879F9"
+                  strokeWidth="2.5"
+                  filter="url(#ballSuperGlow)"
+                  className="animate-pulse"
+                />
+                {/* Downward triangle pointer to orb */}
+                <polygon
+                  points="-6,14 6,14 0,22"
+                  fill="#2c054e"
+                  stroke="#E879F9"
+                  strokeWidth="1.5"
+                />
+                <text
+                  x="0"
+                  y="4"
+                  textAnchor="middle"
+                  fontSize="12"
+                  fontWeight="900"
+                  letterSpacing="1"
+                  fill="#FFFFFF"
+                >
+                  🎉 WOHOOO! 🚀
+                </text>
+              </g>
+            )}
           </svg>
         </div>
 
@@ -799,10 +839,16 @@ export function HowItWorksLoop() {
                   </div>
 
                   {isActive ? (
-                    <span className="flex items-center gap-1.5 rounded-full border border-brand-400/50 bg-brand-950/90 px-2.5 py-1 text-[11px] font-semibold text-[#e879f9] shadow-glow">
-                      <Zap className="h-3 w-3 fill-current text-[#e879f9]" />
-                      At Station
-                    </span>
+                    step.step === 6 ? (
+                      <span className="flex items-center gap-1.5 rounded-full border border-[#e879f9] bg-gradient-to-r from-brand-900 to-[#2e0854] px-2.5 py-1 text-[11px] font-bold text-white shadow-glow animate-bounce">
+                        🎉 WOHOOO! Recovered
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1.5 rounded-full border border-brand-400/50 bg-brand-950/90 px-2.5 py-1 text-[11px] font-semibold text-[#e879f9] shadow-glow">
+                        <Zap className="h-3 w-3 fill-current text-[#e879f9]" />
+                        At Station
+                      </span>
+                    )
                   ) : (
                     <span className="text-[11px] text-ink-500 transition-colors group-hover:text-brand-300">
                       Step {step.step}
