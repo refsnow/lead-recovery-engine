@@ -4,6 +4,7 @@ import {
   ShieldCheck, Workflow, MessageSquare, Flame, Phone,
 } from 'lucide-react';
 import { Reveal } from '@/components/ui/reveal';
+import { HowItWorksLoop } from '@/components/home/how-it-works-loop';
 
 export const metadata = {
   title: 'Recover the leads you are already paying for',
@@ -16,15 +17,6 @@ const PROBLEMS = [
   { icon: Clock, title: 'The follow-up was promised, not made', body: 'A callback is agreed, the day passes, and no system anywhere records that the commitment was missed.' },
   { icon: UserX, title: 'No one owned it', body: 'A lead sits unassigned. Everyone assumes someone else has it, so nobody does.' },
   { icon: Moon, title: 'It went quiet and stayed quiet', body: 'A high-intent buyer stops replying. Without a trigger, they are simply forgotten.' },
-];
-
-const STEPS = [
-  { title: 'Capture', body: 'Leads arrive from Meta Lead Ads, your website, portals and walk-ins into one pipeline, deduplicated on arrival.' },
-  { title: 'Respond', body: 'An automated first response goes out immediately through approved business messaging — before the lead contacts a competitor.' },
-  { title: 'Qualify', body: 'The assistant collects location, configuration, budget, timeline and intent, answering only from your approved knowledge base.' },
-  { title: 'Score and route', body: 'Each lead is scored on configurable signals and assigned to a salesperson, who is notified straight away.' },
-  { title: 'Follow up', body: 'A configurable cadence runs until the lead replies or books a visit. Overdue human follow-ups escalate to the manager.' },
-  { title: 'Recover', body: 'Uncontacted, overdue, dormant, unowned and high-intent-inactive leads are surfaced as ranked alerts with the action attached.' },
 ];
 
 const FEATURES = [
@@ -232,20 +224,9 @@ export default function LandingPage() {
           </p>
         </Reveal>
 
-        <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {STEPS.map((step, index) => (
-            <Reveal key={step.title} delayMs={index * 80}>
-              <li className="lift group relative h-full overflow-hidden rounded-2xl border border-ink-200 bg-ink-100 p-5 hover:border-brand-500/40 hover:shadow-pop">
-                <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 text-xs font-bold text-white shadow-sm shadow-brand-500/30">
-                  {index + 1}
-                </span>
-                <h3 className="mt-4 text-sm font-semibold text-ink-900">{step.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink-600">{step.body}</p>
-              </li>
-            </Reveal>
-          ))}
-        </ol>
+        <Reveal delayMs={100}>
+          <HowItWorksLoop />
+        </Reveal>
       </section>
 
       {/* FEATURES */}
