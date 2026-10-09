@@ -4,7 +4,9 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Play, Pause, RotateCcw, CheckCircle2, ArrowRight,
   Inbox, Send, Bot, Gauge, CalendarClock, Flame, Zap,
+  Volume2, VolumeX,
 } from 'lucide-react';
+import { coasterAudio } from '@/lib/coaster-audio';
 
 export interface StepData {
   step: number;
@@ -218,12 +220,14 @@ export function HowItWorksLoop() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [ballPos, setBallPos] = useState({ x: 90, y: 120, angle: 0 });
   const [progressPercent, setProgressPercent] = useState(0);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
 
   const pathRef = useRef<SVGPathElement>(null);
   const animRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const elapsedOffsetRef = useRef<number>(0);
   const totalLengthRef = useRef<number>(0);
+  const lastStationSoundRef = useRef<number>(-1);
 
   // Generate the rollercoaster spline path once
   const trackPathD = useMemo(() => generateClosedSplinePath(COASTER_WAYPOINTS), []);
@@ -316,7 +320,22 @@ export function HowItWorksLoop() {
             }
           });
 
+          if (closestIdx !== lastStationSoundRef.current) {
+            lastStationSoundRef.current = closestIdx;
+            if (isSoundEnabled) {
+              coasterAudio.playStationArrival(closestIdx);
+            }
+          }
+
           setActiveStation(closestIdx);
+        }
+
+        // Modulate coaster track rumble & lift clicks if sound is enabled
+        if (isSoundEnabled) {
+          const isLiftHill = pt.x >= 70 && pt.x <= 190 && pt.y <= 130;
+          const isDiving = ptAhead.y > pt.y + 0.3;
+          const speed = isDiving ? 0.9 : 0.25;
+          coasterAudio.updatePhysics(speed, isLiftHill);
         }
       }
 
@@ -330,7 +349,21 @@ export function HowItWorksLoop() {
         cancelAnimationFrame(animRef.current);
       }
     };
-  }, [isPlaying]);
+  }, [isPlaying, isSoundEnabled]);
+
+  const handleToggleSound = () => {
+    if (!isSoundEnabled) {
+      const ok = coasterAudio.init();
+      if (ok) {
+        coasterAudio.unmute();
+        setIsSoundEnabled(true);
+        coasterAudio.playStationArrival(activeStation);
+      }
+    } else {
+      coasterAudio.mute();
+      setIsSoundEnabled(false);
+    }
+  };
 
   // Jump coaster directly to a station when clicked
   const handleJumpToStation = (stationIdx: number) => {
@@ -341,6 +374,10 @@ export function HowItWorksLoop() {
       elapsedOffsetRef.current = targetProgress * TOTAL_LOOP_DURATION_MS;
       startTimeRef.current = null;
       setActiveStation(stationIdx);
+      if (isSoundEnabled) {
+        lastStationSoundRef.current = stationIdx;
+        coasterAudio.playStationArrival(stationIdx);
+      }
     }
   };
 
@@ -383,14 +420,43 @@ export function HowItWorksLoop() {
           </div>
 
           {/* Interactive loop controls */}
-          <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div className="flex flex-wrap items-center gap-2 self-end sm:self-auto">
+            {/* Sound Toggle Button */}
+            <button
+              type="button"
+              onClick={handleToggleSound}
+              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all shadow-glow ${
+                isSoundEnabled
+                  ? 'border-[#e879f9]/70 bg-brand-950/90 text-[#e879f9] shadow-brand-500/30'
+                  : 'border-ink-200/80 bg-ink-100/90 text-ink-500 hover:text-white hover:border-brand-500/50'
+              }`}
+              title={isSoundEnabled ? 'Mute coaster audio' : 'Enable live rollercoaster audio'}
+            >
+              {isSoundEnabled ? (
+                <>
+                  <Volume2 className="h-3.5 w-3.5 text-[#e879f9] animate-pulse" />
+                  <span>Sound ON</span>
+                  <span className="flex items-end gap-0.5 h-3 ml-0.5">
+                    <span className="w-0.5 bg-[#e879f9] rounded-full animate-bounce h-2" />
+                    <span className="w-0.5 bg-brand-400 rounded-full animate-bounce h-3 delay-75" />
+                    <span className="w-0.5 bg-[#e879f9] rounded-full animate-bounce h-1.5 delay-150" />
+                  </span>
+                </>
+              ) : (
+                <>
+                  <VolumeX className="h-3.5 w-3.5 text-ink-500" />
+                  <span>Turn ON Sound</span>
+                </>
+              )}
+            </button>
+
             <button
               type="button"
               onClick={() => handleJumpToStation(0)}
               className="flex items-center gap-1 rounded-lg border border-ink-200/80 bg-ink-100/90 px-2.5 py-1.5 text-xs text-ink-600 transition-colors hover:border-brand-500/50 hover:bg-brand-950/60 hover:text-white"
             >
               <RotateCcw className="h-3 w-3" />
-              <span className="hidden sm:inline">Reset Loop</span>
+              <span className="hidden sm:inline">Reset</span>
             </button>
             <button
               type="button"
